@@ -1,4 +1,5 @@
 clear all;
+close all;
 ### Define Environment ####
 global k = 10;  # spring constant
 global g = 10;  # gravitatonal acceleration
@@ -9,7 +10,7 @@ global l0        = 0.5;  # L0 the extention when m = 0
 global theta_ini = 0.4;  # initial displacement of pendulum
 
 ## Simulation Control ##
-global t_delta = 0.00001;  # accuracy (simulation in steps of delta t)
+global t_delta = 0.0001;  # accuracy (simulation in steps of delta t)
 T_max   = 10;    # number of units of time to simulate
 
 ## plot controls ##
@@ -19,6 +20,8 @@ lim  = 1.5;  # the lim of the box containing the pendulum
 FPS  = 20;   # frames per unit time
 anim = 1;    # set to 1 if you want to animate pendulum
 
+# keep FPS at least 10 to get decent graphs
+# 20 is better but aslo slow to animate
 ###------------------------- begin script -------------------------##
 # pendulum structure
 global pendulum;
@@ -68,12 +71,14 @@ n   = uint64(1);
 # counter for data spacing
 cnt = uint64(0);
 
-## space data accornging to number of frames required
-# frames per unit
-fp_unit = FPS;
+## space data according to a multiple of the number of frames required
+# data frames per unit time
+dfpm     = 2;
+dfp_unit = dfpm * FPS;
 # number of t_deltas between frames
-tp = uint64(1 / fp_unit / t_delta);
+tp = uint64(1 / dfp_unit / t_delta);
 
+# Give error
 if(tp > T_max / t_delta)
 	printf("Error: tp cannot be greater than total simpulation points\n");
 	return;
@@ -149,32 +154,29 @@ if (anim)
 	Y_data = - L_data .* cos(Theta_data);
 
 	# Measure animation time
-	tstart2 = clock();
+	tstart = clock();
 	#start Animation
-	for m = 1:--n;
-		tstart = clock();
-		#calculate time
-		t = cast((m-1)*tp,"double")*t_delta;
+	for m = 1:dfpm:--n;
 		# plot 1 (visualisation of pendulum)
 		subplot(1,2,1);
 		h = quiver(0,0, X_data(m), Y_data(m), "k", "linewidth", 1);
-		set(h, "maxheadsize", 0.0);
+		set(h, "maxheadsize", 0);
 		axis([-lim, lim, -2*lim, 0], "equal");
 		grid("on");
-		title(sprintf("t = %0.2f",t));
+		title(sprintf("t = %0.2f",t_data(m)));
 		# plot 2 (trajectory plot)
 		subplot(1,2,2);
 		hold "on";
 		plot(X_data(m), Y_data(m), "*r", "markersize", 3);
 		axis([-lim, lim, -2*lim, 0], "equal");
 		grid("on");
-		title(sprintf("t = %0.2f",t));
-
-		## subract execution time
-		exe_time = etime(clock(), tstart);
-		pause(t_delta * tp - exe_time);
+		title(sprintf("t = %0.2f",t_data(m)));
+		
+		## exe_time itself id about 0.16 seconds
+		# so time compensation is useless for any meaningful values of FPS
+		pause(0);
 	endfor
 	# print total animation time
-	exe_time = etime(clock(), tstart2);
+	exe_time = etime(clock(), tstart);
 	printf("Animation Time\t= %f\n",exe_time);
 endif
