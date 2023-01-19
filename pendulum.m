@@ -1,7 +1,6 @@
 clear all;
 close all;
-
-#### Define Environment ####
+### Define Environment ####
 global k = 10;  # spring constant
 global g = 10;  # gravitatonal acceleration
 global m = 1;   # mass of bob
@@ -11,14 +10,18 @@ global l0        = 0.5;  # L0 the extention when m = 0
 global theta_ini = 0.4;  # initial displacement of pendulum
 
 ## Simulation Control ##
-global t_delta = 0.001;  # accuracy (simulation in steps of delta t)
-T_max   = 30;    # number of units of time to simulate
+global t_delta = 0.0001;  # accuracy (simulation in steps of delta t)
+T_max   = 10;    # number of units of time to simulate
 
 ## plot controls ##
-lim = 1.5;  # the lim of the box containing the pendulum
-FPS = 20; # frames per unit time
+## Important note: this also affects the nuber of data points
+## and thus also the "smoothness" of the plots
+lim  = 1.5;  # the lim of the box containing the pendulum
+FPS  = 20; # frames per unit time
 plot_l_theta = 1; # set to 1 if you want to plot l vs theta and related data
 
+# keep FPS at least 10 to get decent graphs
+# 20 is better but aslo slow to animate
 ###------------------------- begin script -------------------------###
 # pendulum structure
 global pendulum;
@@ -63,11 +66,14 @@ function update_pendulum ()
 	update_acceleration();
 endfunction
 
-# frames per unit
-fp_unit = FPS;
-# number of t_deltas between frames
-tp = 1 / fp_unit / t_delta;
-# counter for plot
+## space data according to a multiple of the number of frames required
+dfpm     = 2;
+# data frames per unit time
+dfp_unit = dfpm * FPS;
+# number of t_deltas between data frames
+tp  = uint64(1 / FPS / t_delta);
+tp2 = uint64(1 / dfp_unit / t_delta);
+#counter for frames
 cnt = 0;
 # counter for data collection
 n   = 1;
@@ -83,13 +89,13 @@ cla;
 # arrays to collect data
 L_data(n)     = 0;
 Theta_data(n) = 0;
-t_data        = 0:t_delta:T_max;;
+t_data        = 0;
 
 #initialise
 initialise_pendulum();
 #measure execution time
-tstart2 = tstart = clock();
-for t = t_data;
+tstart = clock();
+for t = 0:t_delta:T_max;
 
 	if(!mod(cnt,tp))
 		# plot 1 (visualisation of pendulum)
@@ -106,23 +112,26 @@ for t = t_data;
 		axis([-lim, lim, -2*lim, 0], "equal");
 		grid("on");
 		title(sprintf("t = %0.2f",t));
-		## subract execution time
-		exe_time = etime(clock(), tstart);
-		pause(t_delta * tp - exe_time);
+
+		## exe_time itself id about > 0.16 seconds
+		# so time compensation is useless for any meaningful values of FPS
+		pause(0);
 	endif
-	cnt++;
+
 	## collect data
-	if(plot_l_theta)
+	if(!mod(cnt,tp2))
 		L_data(n)     = pendulum.l;
 		Theta_data(n) = pendulum.theta;
+		t_data(n)     = t;
 		n++;
 	endif
+	cnt++;
 
 	update_pendulum();
 endfor
 # print total execution time
-exe_time = etime(clock(), tstart2);
-printf("t = %f\n",exe_time);
+exe_time = etime(clock(), tstart);
+printf("Simulation Time\t= %f\n", exe_time);
 
 if(plot_l_theta)
 	## setup second figure
