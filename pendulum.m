@@ -1,3 +1,4 @@
+clear all;
 ### Define Environment ####
 global k = 10;  # spring constant
 global g = 10;  # gravitatonal acceleration
@@ -152,21 +153,22 @@ if (anim)
 	#start Animation
 	for m = 1:--n;
 		tstart = clock();
-
+		#calculate time
+		t = cast((m-1)*tp,"double")*t_delta;
 		# plot 1 (visualisation of pendulum)
 		subplot(1,2,1);
 		h = quiver(0,0, X_data(m), Y_data(m), "k", "linewidth", 1);
 		set(h, "maxheadsize", 0.0);
 		axis([-lim, lim, -2*lim, 0], "equal");
 		grid("on");
-		title(sprintf("t = %0.2f",(m)*t_delta));
+		title(sprintf("t = %0.2f",t));
 		# plot 2 (trajectory plot)
 		subplot(1,2,2);
 		hold "on";
 		plot(X_data(m), Y_data(m), "*r", "markersize", 3);
 		axis([-lim, lim, -2*lim, 0], "equal");
 		grid("on");
-		title(sprintf("t = %0.2f",(m)*t_delta));
+		title(sprintf("t = %0.2f",t));
 
 		## subract execution time
 		exe_time = etime(clock(), tstart);
