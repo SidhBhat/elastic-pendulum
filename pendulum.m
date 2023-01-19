@@ -9,7 +9,7 @@ global theta_ini = 0.4;  # initial displacement of pendulum
 
 ## Simulation Control ##
 global t_delta = 0.00001;  # accuracy (simulation in steps of delta t)
-T_max   = 100;    # number of units of time to simulate
+T_max   = 10;    # number of units of time to simulate
 
 ## plot controls ##
 ## Important note: this also affects the nuber of data points
