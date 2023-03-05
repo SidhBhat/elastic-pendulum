@@ -11,14 +11,14 @@ global theta_ini = 0.4;  # initial displacement of pendulum
 
 ## Simulation Control ##
 global t_delta = 0.0001;  # accuracy (simulation in steps of delta t)
-T_max   = 10;    # number of units of time to simulate
+T_max          = 10;    # number of units of time to simulate
 
 ## plot controls ##
 ## Important note: this also affects the nuber of data points
 ## and thus also the "smoothness" of the plots
-lim  = 1.5;  # the lim of the box containing the pendulum
-FPS  = 20; # frames per unit time
-plot_l_theta = 1; # set to 1 if you want to plot l vs theta and related data
+lim          = 1.5;  # the lim of the box containing the pendulum
+FPS          = 20;   # frames per unit time
+plot_l_theta = 1;    # set to 1 if you want to plot l vs theta and related data
 
 # keep FPS at least 10 to get decent graphs
 # 20 is better but aslo slow to animate
