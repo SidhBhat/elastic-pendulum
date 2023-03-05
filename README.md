@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is an octave/matlab script to simulate an [elastic pendulum](https://en.wikipedia.org/wiki/Elastic_pendulum).
+This is an octave script to simulate an [elastic pendulum](https://en.wikipedia.org/wiki/Elastic_pendulum).
 We use the euler integration methode for the simulation.
 
 ## How to Use
@@ -12,7 +12,7 @@ You can change any variable before the `begin script` line.
 
 Environment Controls:
 
-```matlab
+```bash
 global k = 10;  # spring constant
 global g = 10;  # gravitatonal acceleration
 global m = 1;   # mass of bob
@@ -20,7 +20,7 @@ global m = 1;   # mass of bob
 
 Plot Controls:
 
-```matlab
+```bash
 lim          = 1.5; # the lim of the box containing the pendulum
 FPS          = 20;  # frames per unit time
 plot_l_theta = 1;   # set to 1 if you want to plot l vs theta and related data
@@ -28,7 +28,7 @@ plot_l_theta = 1;   # set to 1 if you want to plot l vs theta and related data
 
 Initial (Boundary) Conditions:
 
-```matlab
+```bash
 global l_ini     = 1;    # initial extent L is streched to
 global l0        = 0.5;  # L0 the extention when m = 0
 global theta_ini = 0.4;  # initial displacement of pendulum
@@ -41,7 +41,7 @@ after the definition.
 
 For the default environment:
 
-```matlab
+```bash
 global k = 10;
 global g = 10;
 global m = 1;
