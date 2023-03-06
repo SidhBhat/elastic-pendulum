@@ -54,7 +54,7 @@ global theta_ini = 0.4;
 
 ![pendulum data](images/pendulum_l_theta.png)
 
-## Not For The Developer
+## Note For The Developer
 
 We have two branches in this repo, onre `main` and the other is called `v2`. the `v2` branch currently not meant to be merged into
 main. It behaves quite differantly than the one in main, in the sense that the script there simulates first than plots only the 
